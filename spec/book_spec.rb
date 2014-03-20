@@ -56,4 +56,12 @@ describe Book do
       test_book.author.should eq 'Henry Miller'
     end
   end
+
+  describe 'title_case' do
+    it 'sets the first letter of each word to a capital letter with a few exceptions' do
+      test_book = Book.create({ :title => 'war and peace' ,:author => 'Leo Tolstoy' })
+      titlized = test_book.title_case(test_book.title)
+      titlized.should eq 'War and Peace'
+    end
+  end
 end
