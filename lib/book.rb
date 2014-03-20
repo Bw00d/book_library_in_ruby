@@ -14,7 +14,6 @@ class Book
     new_book
   end
 
-
   def self.all
     books = []
     results = DB.exec("SELECT * FROM books;")
@@ -25,6 +24,26 @@ class Book
       books << Book.new({ :title => title, :author => author, :id => id })
     end
     books
+  end
+
+  def self.fetch_by_title(title)
+    book = []
+    Book.all.each do |obj|
+      if obj.title == title
+        book << obj
+      end
+    end
+    book
+  end
+
+  def self.fetch_by_author(author)
+    book = []
+    Book.all.each do |obj|
+      if obj.author == author
+        book << obj
+      end
+    end
+    book
   end
 
   def save
@@ -41,22 +60,13 @@ class Book
   end
 
   def update(attributes)
-    @author = if attributes[:author].nil? then @author else attributes[:author] end
+    if attributes[:author].nil? then @author = @author else @author = attributes[:author] end
     @title = if attributes[:title].nil? then @title else attributes[:title] end
-    updated_book = DB.exec("UPDATE books SET title = '#{@title}', author = '#{@author}';")
+    updated_book = DB.exec("UPDATE books SET title = '#{@title}', author = '#{@author}' WHERE id = #{@id};")
+    p @author
+    p @title
   end
 
-  # def title_case(string)
-  #   exceptions = ["the", "an", "of", "is", "as", "at", "by", "for", "in", "on", "per", "to", "and", "but", "nor", "or"]
-  #   words = string.downcase.split
-  #   words.each do |word|
-  #     unless exceptions.include?(word)
-  #       word.capitalize!
-  #     end
-  #     words[0].capitalize!
-  #   end
-  #   words.join(" ")
-  # end
 end
 
 

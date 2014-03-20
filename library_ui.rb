@@ -52,7 +52,7 @@ def admin_menu
 end
 
 def add_book
-  puts "**Add New Book**\n\n"
+  puts "** Add New Book **\n\n"
   puts 'Enter book title:'
   new_title = gets.chomp
   new_title = title_case(new_title)
@@ -71,6 +71,36 @@ def list_all_books
   end
   puts "\n\n"
   if @role == 'L' then admin_menu else patron_menu end
+end
+
+def update_book
+  puts "** Book Editor **"
+  puts "\nEnter the title of a book you want to edit:"
+  puts "M for main menu"
+  response = gets.chomp
+  response = title_case(response)
+  result = Book.fetch_by_title(response)
+  if result == []
+    puts "That title is not in the catalog"
+    admin_menu
+  end
+  puts "Enter new title to change or leave blank for no change:"
+  new_title = gets.chomp
+  new_title = title_case(new_title)
+  puts "Enter the author name to change or leave blank for no change:"
+  new_author = gets.chomp
+  new_author = title_case(new_author)
+  if new_author == ""
+    new_author = nil
+  end
+  if new_title == ""
+    new_title = nil
+  end
+  p new_author
+  p new_title
+  result[0].update({ :title => new_title, :author => new_author })
+  puts "#{response} has been updated."
+  admin_menu
 end
 
 def title_case(string)

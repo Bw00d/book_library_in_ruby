@@ -33,6 +33,20 @@ describe Book do
     end
   end
 
+  describe '.fetch_by_title' do
+    it 'returns the book that matches the title entered' do
+      test_book = Book.create({ :title => 'Sexxus' ,:author => 'Henry Miller'})
+      Book.fetch_by_title('Sexxus').should eq [test_book]
+    end
+  end
+
+  describe '.fetch_by_author' do
+    it 'returns the book that matches the title entered' do
+      test_book = Book.create({ :title => 'Sexxus' ,:author => 'Henry Miller'})
+      Book.fetch_by_author('Henry Miller').should eq [test_book]
+    end
+  end
+
   describe '#save' do
     it 'saves each instance of book' do
       test_book = Book.new({ :title => 'Black Spring' ,:author => 'Henry Miller' })
@@ -54,14 +68,6 @@ describe Book do
       test_book = Book.create({ :title => 'Black Spring' ,:author => 'henry Miller' })
       test_book.update({ :author => 'Henry Miller'})
       test_book.author.should eq 'Henry Miller'
-    end
-  end
-
-  describe 'title_case' do
-    it 'sets the first letter of each word to a capital letter with a few exceptions' do
-      test_book = Book.create({ :title => 'war and peace' ,:author => 'Leo Tolstoy' })
-      titlized = test_book.title_case(test_book.title)
-      titlized.should eq 'War and Peace'
     end
   end
 end
