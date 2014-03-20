@@ -29,7 +29,7 @@ def admin_menu
   puts "LB to list all books in the catalog"
   puts "UB to update a book entry in the catalog"
   puts "DB to delete a book from the catalog"
-  puts "Search is coming soon!"
+  puts "S to search books by title or author"
   puts "X to exit application."
   prompt
   response = gets.chomp.upcase
@@ -43,6 +43,8 @@ def admin_menu
     update_book
   when 'DB'
     delete_book
+  when 'S'
+    search_books
   when 'X'
     exit
   else
@@ -71,6 +73,37 @@ def list_all_books
   end
   puts "\n\n"
   if @role == 'L' then admin_menu else patron_menu end
+end
+
+def search_books
+  puts "** Book Search **"
+  puts "Do you want to search by [A]uthor or [T]itle? Enter any other key to return to menu."
+  prompt
+  choice = gets.chomp.upcase
+  if choice == 'A'
+    puts "\nEnter the author you want to find:"
+    response = gets.chomp
+    response = title_case(response)
+    result = Book.fetch_by_author(response)
+    if result == []
+      puts "Author not found."
+      search_books
+    end
+    puts "Found --> #{result[0].title} by #{result[0].author}\n\n"
+  elsif choice == 'T'
+    puts "\nEnter the title you want to find:"
+    response = gets.chomp
+    response = title_case(response)
+    result = Book.fetch_by_title(response)
+    if result == []
+      puts "Title not found."
+      search_books
+    end
+    puts "Found --> #{result[0].title} by #{result[0].author}\n\n"
+  else
+    admin_menu
+  end
+  admin_menu
 end
 
 def update_book
