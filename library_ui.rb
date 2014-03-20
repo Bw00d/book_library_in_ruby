@@ -103,6 +103,26 @@ def update_book
   admin_menu
 end
 
+def delete_book
+  puts "\n\nEnter the name of a book you want to delete from catalog:"
+  to_burn = gets.chomp
+  to_burn = title_case(to_burn)
+  result = Book.fetch_by_title(to_burn)
+  if result == []
+    puts "That title is not in the catalog"
+    admin_menu
+  end
+  puts "Are you sure you want to delete #{to_burn}? (y)"
+  response = gets.chomp.upcase
+  if response == 'Y'
+    result[0].burn
+    puts "\n\n#{to_burn} was deleted.\n\n"
+  else
+    puts "\n\nDelete aborted\n\n"
+  end
+  admin_menu
+end
+
 def title_case(string)
     exceptions = ["the", "an", "of", "is", "as", "at", "by", "for", "in", "on", "per", "to", "and", "but", "nor", "or"]
     words = string.downcase.split
