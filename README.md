@@ -1,4 +1,4 @@
-#book_library_in_ruby
+#Book Library in Ruby and Postgres
 ##Epicodus bootcamp exercise
 
 ####This is an exercise to practice join tables in a postgres database. We worked off user stories
