@@ -1,10 +1,9 @@
 class Book
 
-  attr_reader :title, :author, :books, :id
+  attr_reader :title, :books, :id
 
   def initialize(attributes)
     @title  = attributes[:title]
-    @author = attributes[:author]
     @id     = attributes[:id]
   end
 
@@ -17,11 +16,10 @@ class Book
   def self.all
     books = []
     results = DB.exec("SELECT * FROM books;")
-    results.each do |book|
-      title = book['title']
-      author = book['author']
-      id = book['id'].to_i
-      books << Book.new({ :title => title, :author => author, :id => id })
+    results.each do |result|
+      title = result['title']
+      id = result['id'].to_i
+      books << Book.new({ :title => title, :id => id })
     end
     books
   end
@@ -36,23 +34,13 @@ class Book
     book
   end
 
-  def self.fetch_by_author(author)
-    book = []
-    Book.all.each do |obj|
-      if obj.author == author
-        book << obj
-      end
-    end
-    book
-  end
-
   def save
-    results = DB.exec("INSERT INTO books (title, author) VALUES ('#{@title}', '#{@author}') RETURNING id;")
+    results = DB.exec("INSERT INTO books (title) VALUES ('#{@title}') RETURNING id;")
     @id = results.first['id'].to_i
   end
 
   def ==(another_book)
-    self.title == another_book.title && self.author == another_book.author && self.id == another_book.id
+    self.title == another_book.title && self.id == another_book.id
   end
 
   def burn
@@ -60,11 +48,7 @@ class Book
   end
 
   def update(attributes)
-    if attributes[:author].nil? then @author = @author else @author = attributes[:author] end
-    @title = if attributes[:title].nil? then @title else attributes[:title] end
-    updated_book = DB.exec("UPDATE books SET title = '#{@title}', author = '#{@author}' WHERE id = #{@id};")
-    p @author
-    p @title
+    updated= DB.exec("UPDATE books SET author = '#{@author}' WHERE id = #{@id};")
   end
 
 end
